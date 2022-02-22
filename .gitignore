@@ -3,3 +3,4 @@ tristulastore/.env
 tristulastore/__pycache__/
 .vscode/
 .venv/
+jstools/node_modules
