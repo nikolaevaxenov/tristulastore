@@ -16,11 +16,11 @@
         font-family: 'Ubuntu', sans-serif;
       }
 
-      .footer {
+      footer {
         background: #333333;
       }
 
-      .header {
+      header {
         background: white;
       }
     </style>
@@ -31,15 +31,15 @@
   </head>
   <body>
     <div class="flex flex-col h-screen justify-between">
-      <div class="header">
+      <header>
         {% include 'navbar.html' %}
-      </div>
-      <div>
+      </header>
+      <main>
         {% block content %}{% endblock content %}
-      </div>
-      <div class="footer h-10">
+      </main>
+      <footer class="h-10">
         {% include 'footer.html' %}
-      </div>
+      </footer>
     </div>
   </body>
 </html>
