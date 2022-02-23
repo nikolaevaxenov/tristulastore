@@ -1,6 +1,11 @@
-*.sqlite3
-tristulastore/.env
-tristulastore/__pycache__/
 .vscode/
 .venv/
+*.sqlite3
+
+tristulastore/.env
+
+tristulastore/__pycache__/
+store/__pycache__/
+account/__pycache__/
+
 jstools/node_modules

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
     {% load tailwind_tags %}
+    {% tailwind_css %}
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +19,10 @@
       footer {
         background: #333333;
       }
+
+      header {
+        background: white;
+      }
     </style>
 
     {% block icon %}{% endblock icon %}
@@ -25,12 +30,11 @@
     <title>{% block title %}{% endblock title %}</title>
   </head>
   <body>
-    {% tailwind_css %}
     <div class="flex flex-col h-screen justify-between">
-      <header class="h-10 mx-16 mt-5 mb-10">
+      <header>
         {% include 'navbar.html' %}
       </header>
-      <main class="mb-auto h-10">
+      <main>
         {% block content %}{% endblock content %}
       </main>
       <footer class="h-10">

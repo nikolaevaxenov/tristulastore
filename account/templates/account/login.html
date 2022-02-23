@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+
+{% block files %}{%endblock files %}
+{% block title %}Логин{%endblock title %}
+
+{% block content %}
+<style>
+    body {
+        background: #E5E5E5;
+    }
+
+    .login {
+        background: white;
+    }
+
+    input[type=text], input[type=password] {
+        border: none;
+        border-bottom: 2px solid black;
+        text-align: center;
+    }
+</style>
+
+<div class="flex flex-col justify-center items-center">
+    <div class="login p-10">
+        <div>
+            <p class="text-5xl font-bold text-center mb-10">ВОЙТИ</p>
+        </div>
+        <form action="/login" method="post">
+            <div class="flex flex-col items-center">
+                <div class="mb-5">
+                    <input type="text" name="email" id="email" placeholder="E-mail">
+                </div>
+                <div class="mb-5">
+                    <input type="password" name="password" id="password" placeholder="Пароль">
+                </div>
+        
+                <div>
+                    <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Войти</p></button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="flex flex-col items-center">
+            <p class="text-[#999999]">Если у вас нет аккаунта <a class="text-black" href="/login">Зарегестрируйтесь</a></p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

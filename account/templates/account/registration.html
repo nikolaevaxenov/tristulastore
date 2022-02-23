@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+
+{% block files %}{%endblock files %}
+{% block title %}Регистрация{%endblock title %}
+
+{% block content %}
+<style>
+    body {
+        background: #E5E5E5;
+    }
+
+    .registration {
+        background: white;
+    }
+
+    input[type=text], input[type=password] {
+        border: none;
+        border-bottom: 2px solid black;
+        text-align: center;
+    }
+</style>
+
+<div class="flex flex-col justify-center items-center">
+    <div class="registration p-10">
+        <div>
+            <p class="text-5xl font-bold text-center mb-10">РЕГИСТРАЦИЯ</p>
+        </div>
+        <form action="/registration" method="post">
+            <div class="flex flex-col items-center">
+                <div class="mb-5">
+                    <input type="text" name="first_name" id="first_name" placeholder="Ваше имя">
+                </div>
+                <div class="mb-5">
+                    <input type="text" name="email" id="email" placeholder="E-mail">
+                </div>
+                <div class="mb-5">
+                    <input type="password" name="password" id="password" placeholder="Пароль">
+                </div>
+                <div class="mb-5">
+                    <input type="password" name="password_submit" id="password_submit" placeholder="Повторите пароль">
+                </div>
+        
+                <div>
+                    <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Зарегистрироваться</p></button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="flex flex-col items-center">
+            <p class="text-[#999999]">Если вы уже имеете аккаунт <a class="text-black" href="/login">Войти</a></p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

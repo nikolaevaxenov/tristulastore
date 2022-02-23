@@ -19,7 +19,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'LOCAL_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['tristula.ga', 'tristula.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['tristula.ga',
+                 'tristula.herokuapp.com', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://tristula.ga']
 
@@ -38,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tailwind',
     'theme',
-    'store'
+    'store',
+    'account'
 ]
 
 MIDDLEWARE = [
@@ -136,5 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TAILWIND_APP_NAME = 'theme'
 NPM_BIN_PATH = 'C:\\Users\\ivan\\AppData\\Local\\fnm_multishells\\15500_1645562716514\\npm.cmd'
 
-db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config(
+    conn_max_age=500, default='postgresql://tristulauser:qwerty@localhost:5432/tristuladb')
 DATABASES['default'].update(db_from_env)
