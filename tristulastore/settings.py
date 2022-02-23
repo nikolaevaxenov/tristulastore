@@ -23,6 +23,10 @@ ALLOWED_HOSTS = ['tristula.ga', 'tristula.herokuapp.com', 'localhost', '127.0.0.
 
 CSRF_TRUSTED_ORIGINS = ['https://tristula.ga']
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -32,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',
+    'theme',
     'store'
 ]
 
@@ -119,7 +125,6 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'tristulastore' / 'static',
     BASE_DIR / 'store' / 'static',
 ]
 
@@ -127,6 +132,9 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TAILWIND_APP_NAME = 'theme'
+NPM_BIN_PATH = 'C:\\Users\\ivan\\AppData\\Local\\fnm_multishells\\15500_1645562716514\\npm.cmd'
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
