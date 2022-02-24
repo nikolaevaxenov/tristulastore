@@ -14,7 +14,7 @@ def registrationPage(request):
             form.save()
             messages.success(request, "Аккаунт успешно создан!")
 
-            redirect('loginPage')
+            return redirect('loginPage')
 
     context = {'form': form}
     return render(request, 'account/registration.html', context)
