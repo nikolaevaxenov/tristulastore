@@ -136,7 +136,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TAILWIND_APP_NAME = 'theme'
-NPM_BIN_PATH = 'C:\\Users\\ivan\\AppData\\Local\\fnm_multishells\\15500_1645562716514\\npm.cmd'
+NPM_BIN_PATH = os.environ.get('NPM_PATH')
 
 db_from_env = dj_database_url.config(
     conn_max_age=500, default='postgresql://tristulauser:qwerty@localhost:5432/tristuladb')
