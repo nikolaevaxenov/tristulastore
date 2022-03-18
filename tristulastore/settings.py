@@ -139,5 +139,5 @@ TAILWIND_APP_NAME = 'theme'
 NPM_BIN_PATH = os.environ.get('NPM_PATH')
 
 db_from_env = dj_database_url.config(
-    conn_max_age=500, default='postgresql://tristulauser:qwerty@localhost:5432/tristuladb')
+    conn_max_age=500, default=os.environ.get('POSTGRESQL_DB'))
 DATABASES['default'].update(db_from_env)

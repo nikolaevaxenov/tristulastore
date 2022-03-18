@@ -4,8 +4,38 @@
 {% block icon %}
 <link rel="icon" href="{% static 'store/threechairs.svg' %}">
 {% endblock icon %}
-{% block files %}{%endblock files %}
+{% block files %}
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
+
+<script>
+    document.addEventListener( 'DOMContentLoaded', function() {
+      var splide = new Splide( '.splide' );
+      splide.mount();
+    } );
+  </script>
+{%endblock files %}
 {% block title %}Три стула. Магазин{%endblock title %}
 
 {% block content %}
+<div class="splide">
+    <div class="splide__track">
+          <div class="splide__list">
+            {% for product in products %}
+            <div class="splide__slide">
+                <div class="grow grid grid-cols-2 grid-rows-1 place-items-center mx-20">
+                    <div class="place-self-center">
+                        <p class="text-center font-bold text-[#333333] text-[32px]">{{product.0}}</p>
+                        <p class="text-center text-[#999999] px-10">{{product.1}}</p>
+                        <p class="mt-1 text-center text-[#999999]"><span class="font-bold text-[#333333]">{{product.2}} р.</span> Если заказ будет оформлен сейчас</p>
+                    </div>
+                    <div class="place-self-center">
+                        <img src="{% static product.3 %}" alt="Chair" width="500vw">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+</div>
 {% endblock content %}
