@@ -7,3 +7,5 @@ tristulastore/.env
 tristulastore/__pycache__/
 store/__pycache__/
 account/__pycache__/
+
+store/ExampleProducts.py
