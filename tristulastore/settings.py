@@ -19,7 +19,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'LOCAL_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['tristula.ga', 'www.tristula.ga', 'tristula.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['tristula.ga', 'www.tristula.ga',
+                 'tristula.herokuapp.com', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://tristula.ga', 'https://www.tristula.ga']
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',
     'tailwind',
     'theme',
     'store',

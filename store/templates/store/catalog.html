@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+{% block files %}
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const splide = new Splide('.splide', {
+        perPage: 4,
+        rewind : true,
+      });
+      splide.mount();
+    });
+  </script>
+{%endblock files %}
+{% block title %}Три стула. Каталог{%endblock title %}
+
+{% block content %}
+<div class="grid grid-cols-4 auto-rows-auto">
+  <div class="col-span-2">
+    <img src="{% static main_product.5|slice:"13:" %}" alt="Product" width="70%">
+  </div>
+  <div class="place-self-center">
+    <p class="font-bold text-[#333333] text-[32px]">{{main_product.1}}</p>
+    <p class="inline text-[#333333] text-[24px]">{{main_product.4}} руб.</p>
+    <p class="inline line-through text-[#999999]">{{main_product.3}} руб.</p>
+    <p class="text-[#999999]">{{main_product.2}}</p>
+    <button class="bg-[#333333] py-2 px-5 mt-2" type="submit"><p class="text-white text-[18px]">Купить</p></button>
+  </div>
+  <div></div>
+  {% if main_product.6 == "Стул" %}
+    <div class="mt-2" style="place-self: baseline center">
+      <a href="/catalog/chair" >
+        Стулья
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22462 3.44922C0.839069 3.08203 0.839069 2.48828 1.22462 2.125L2.15157 1.24218C2.53712 0.874997 3.16055 0.874997 3.542 1.24218L7.50001 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81173 9.1289 7.18829 9.1289 6.80274 8.76172Z" fill="#333333"/>
+        </svg>
+      </a>
+    </div>
+  {% else %}
+    <div class="text-[#999999] mt-2" style="place-self: baseline center">
+      <a href="/catalog/chair">
+        Стулья
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22461 3.44922C0.839061 3.08203 0.839061 2.48828 1.22461 2.125L2.15156 1.24218C2.53711 0.874997 3.16055 0.874997 3.54199 1.24218L7.5 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81172 9.1289 7.18828 9.1289 6.80274 8.76172Z" fill="#999999"/>
+        </svg>
+      </a>
+    </div>
+  {% endif %}
+
+  {% if main_product.6 == "Шкаф" %}
+    <div class="mt-2" style="place-self: baseline center">
+      <a href="/catalog/closet" >
+        Шкафы
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22462 3.44922C0.839069 3.08203 0.839069 2.48828 1.22462 2.125L2.15157 1.24218C2.53712 0.874997 3.16055 0.874997 3.542 1.24218L7.50001 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81173 9.1289 7.18829 9.1289 6.80274 8.76172Z" fill="#333333"/>
+        </svg>
+      </a>
+    </div>
+  {% else %}
+    <div class="text-[#999999] mt-2" style="place-self: baseline center">
+      <a href="/catalog/closet" >
+        Шкафы
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22461 3.44922C0.839061 3.08203 0.839061 2.48828 1.22461 2.125L2.15156 1.24218C2.53711 0.874997 3.16055 0.874997 3.54199 1.24218L7.5 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81172 9.1289 7.18828 9.1289 6.80274 8.76172Z" fill="#999999"/>
+        </svg>
+      </a>
+    </div>
+  {% endif %}
+
+  {% if main_product.6 == "Стол" %}
+    <div class="mt-2" style="place-self: baseline center">
+      <a href="/catalog/table" >
+        Столы
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22462 3.44922C0.839069 3.08203 0.839069 2.48828 1.22462 2.125L2.15157 1.24218C2.53712 0.874997 3.16055 0.874997 3.542 1.24218L7.50001 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81173 9.1289 7.18829 9.1289 6.80274 8.76172Z" fill="#333333"/>
+        </svg>
+      </a>
+    </div>
+  {% else %}
+    <div class="text-[#999999] mt-2" style="place-self: baseline center">
+      <a href="/catalog/table" >
+        Столы
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22461 3.44922C0.839061 3.08203 0.839061 2.48828 1.22461 2.125L2.15156 1.24218C2.53711 0.874997 3.16055 0.874997 3.54199 1.24218L7.5 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81172 9.1289 7.18828 9.1289 6.80274 8.76172Z" fill="#999999"/>
+        </svg>
+      </a>
+    </div>
+  {% endif %}
+
+  {% if main_product.6 == "Тумба" %}
+    <div class="mt-2" style="place-self: baseline center">
+      <a href="/catalog/pedestal" >
+        Тумбы
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22462 3.44922C0.839069 3.08203 0.839069 2.48828 1.22462 2.125L2.15157 1.24218C2.53712 0.874997 3.16055 0.874997 3.542 1.24218L7.50001 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81173 9.1289 7.18829 9.1289 6.80274 8.76172Z" fill="#333333"/>
+        </svg>
+      </a>
+    </div>
+  {% else %}
+    <div class="text-[#999999] mt-2" style="place-self: baseline center">
+      <a href="/catalog/pedestal" >
+        Тумбы
+        <svg class="inline" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.80274 8.76172L1.22461 3.44922C0.839061 3.08203 0.839061 2.48828 1.22461 2.125L2.15156 1.24218C2.53711 0.874997 3.16055 0.874997 3.54199 1.24218L7.5 5.0039L11.4539 1.23828C11.8395 0.871091 12.4629 0.871091 12.8443 1.23828L13.7754 2.12109C14.1609 2.48828 14.1609 3.08203 13.7754 3.44531L8.19727 8.75781C7.81172 9.1289 7.18828 9.1289 6.80274 8.76172Z" fill="#999999"/>
+        </svg>
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="splide col-span-4 mt-2 mb-10 px-12" role="group" aria-label="Splide Basic HTML Example">
+    <div class="splide__track">
+      <ul class="splide__list">
+        {% for product in products %}
+        <div class="splide__slide px-2">
+          <a href="/catalog/{{product_type}}/{{product.0}}">
+            <div>
+              <img class="mx-auto" src="{% static product.5|slice:"13:" %}" alt="Product" width="50%">
+              <p class="text-[#333333] text-[24px] text-center">{{product.4}} руб.</p>
+              <p class="text-[#999999]">{{product.2}}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock content %}
