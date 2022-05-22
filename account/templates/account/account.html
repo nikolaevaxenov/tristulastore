@@ -17,9 +17,319 @@
       splide.mount();
     });
   </script>
+
+<style>
+  input[type=text], input[type=number], input[type=password], input[type=email] {
+    border: none;
+    border-bottom: 2px solid black;
+    text-align: center;
+  }
+</style>
 {%endblock files %}
 {% block title %}Три стула. Личный кабинет{%endblock title %}
 
 {% block content %}
+<div class="grid grid-cols-2 mx-2">
+  <div>
+    <h1 class="font-bold text-[#333333] text-[32px]">Добро пожаловать, {% if userDetails %}{{userDetails.last_name}} {{userDetails.first_name}}{% if userDetails.middle_name %} {{userDetails.middle_name}}{% endif %}{% else %}{{ request.user }}{% endif %}!</h1>
+    {% if userDetails %}<p class="font-bold text-[#333333] text-[16px]">Номер телефона: {{userDetails.phone_number}}</p>{% endif %}
+    {% if userAddress %}<br><p class="font-bold text-[#333333] text-[16px]">Адрес: г. {{userAddress.city}}, {{userAddress.street}}, {{userAddress.house}}{% if userAddress.housing %}, подъезд {{userAddress.housing}}{% endif %}{% if userAddress.apartment %}, квартира {{userAddress.apartment}}{% endif %}</p>{% endif %}
+    {% if userCard %}<br><p class="font-bold text-[#333333] text-[16px]">Банковская карта: • • • • {{userCard.card_number|slice:"-4:"}}</p>{% endif %}
+    <div>
+      <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editUserDetails()"><p class="text-white text-[18px]" id="detailsBtn">Изменить личные данные</p></button><br>
+      <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editAddress()"><p class="text-white text-[18px]" id="addressBtn">Изменить адрес</p></button><br>
+      <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editCard()"><p class="text-white text-[18px]" id="cardBtn">Изменить банковскую карту</p></button><br>
+    </div>
+    <div class="flex mt-2" id="detailsForm" style="display: none">
+      <form method="POST" action="/account/details/">
+        {% csrf_token %}
+        <div class="flex flex-col items-center">
+            {{ UserDetailsForm.first_name.label_tag }}
+            <div class="mb-5">
+                {{ UserDetailsForm.first_name }}
+            </div>
+            {% if UserDetailsForm.first_name.errors %}
+                <div class="mb-5">
+                    {{ UserDetailsForm.first_name.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserDetailsForm.last_name.label_tag }}
+            <div class="mb-5">
+                {{ UserDetailsForm.last_name }}
+            </div>
+            {% if UserDetailsForm.last_name.errors %}
+                <div class="mb-5">
+                    {{ UserDetailsForm.last_name.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserDetailsForm.middle_name.label_tag }}
+            <div class="mb-5">
+                {{ UserDetailsForm.middle_name }}
+            </div>
+            {% if UserDetailsForm.middle_name.errors %}
+                <div class="mb-5">
+                    {{ UserDetailsForm.middle_name.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserDetailsForm.phone_number.label_tag }}
+            <div class="mb-5">
+                {{ UserDetailsForm.phone_number }}
+            </div>
+            {% if UserDetailsForm.phone_number.errors %}
+                <div class="mb-5">
+                    {{ UserDetailsForm.phone_number.errors }}
+                </div>
+            {% endif %}
+            {% if UserDetailsForm.non_field_errors %}
+                <div class="mb-5">
+                    {% for error in UserDetailsForm.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div>
+                <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Сохранить</p></button>
+            </div>
+        </div>
+      </form>
+    </div>
+    
+    <div class="flex" id="addressForm" style="display: none">
+      <form method="POST" action="/account/address/">
+        {% csrf_token %}
+        <div class="flex flex-col items-center">
+            {{ UserAddressForm.city.label_tag }}
+            <div class="mb-5">
+                {{ UserAddressForm.city }}
+            </div>
+            {% if UserAddressForm.city.errors %}
+                <div class="mb-5">
+                    {{ UserAddressForm.city.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserAddressForm.street.label_tag }}
+            <div class="mb-5">
+                {{ UserAddressForm.street }}
+            </div>
+            {% if UserAddressForm.street.errors %}
+                <div class="mb-5">
+                    {{ UserAddressForm.street.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserAddressForm.house.label_tag }}
+            <div class="mb-5">
+                {{ UserAddressForm.house }}
+            </div>
+            {% if UserAddressForm.house.errors %}
+                <div class="mb-5">
+                    {{ UserAddressForm.house.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserAddressForm.housing.label_tag }}
+            <div class="mb-5">
+                {{ UserAddressForm.housing }}
+            </div>
+            {% if UserAddressForm.housing.errors %}
+                <div class="mb-5">
+                    {{ UserAddressForm.housing.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserAddressForm.apartment.label_tag }}
+            <div class="mb-5">
+                  {{ UserAddressForm.apartment }}
+              </div>
+            {% if UserAddressForm.apartment.errors %}
+                <div class="mb-5">
+                    {{ UserAddressForm.apartment.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserAddressForm.intercom_code.label_tag }}
+            <div class="mb-5">
+                  {{ UserAddressForm.intercom_code }}
+            </div>
+            {% if UserAddressForm.intercom_code.errors %}
+                <div class="mb-5">
+                    {{ UserAddressForm.intercom_code.errors }}
+                </div>
+            {% endif %}
+            {% if UserAddressForm.non_field_errors %}
+                <div class="mb-5">
+                    {% for error in UserAddressForm.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div>
+                <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Сохранить</p></button>
+            </div>
+        </div>
+      </form>
+    </div>
+      
+    <div class="flex mt-2" id="cardForm" style="display: none">
+      <form method="POST" action="/account/card/">
+        {% csrf_token %}
+        <div class="flex flex-col items-center">
+            {{ UserCardForm.card_number.label_tag }}
+            <div class="mb-5">
+                {{ UserCardForm.card_number }}
+            </div>
+            {% if UserCardForm.card_number.errors %}
+                <div class="mb-5">
+                    {{ UserCardForm.card_number.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserCardForm.expiry_date.label_tag }}
+            <div class="mb-5">
+                {{ UserCardForm.expiry_date }}
+            </div>
+            {% if UserCardForm.expiry_date.errors %}
+                <div class="mb-5">
+                    {{ UserCardForm.expiry_date.errors }}
+                </div>
+            {% endif %}
+    
+            {{ UserCardForm.cvc_code.label_tag }}
+            <div class="mb-5">
+                {{ UserCardForm.cvc_code }}
+            </div>
+            {% if UserCardForm.cvc_code.errors %}
+                <div class="mb-5">
+                    {{ UserCardForm.cvc_code.errors }}
+                </div>
+            {% endif %}
+            {% if UserCardForm.non_field_errors %}
+                <div class="mb-5">
+                    {% for error in UserCardForm.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div>
+                <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Сохранить</p></button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div>
+    <h1 class="font-bold text-[#333333] text-[32px]">История заказов</h1>
+    {% for order, price in products %}
+    <div style="border-bottom: 2px solid black; margin: 1rem">
+      <p class="font-bold text-[#333333]">Заказ №{{order.0.2}}</p>
+      <div class="flex justify-center">
+        <table style="border-collapse: separate; border-spacing: 0.5rem">
+          <thead>
+            <tr>
+              <th>Наименование</th>
+              <th>Цена</th>
+              <th>Количество</th>
+              <th>Сумма</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in order %}
+            <tr>
+              <td class="text-center">{{product.0.name}}</td>
+              <td class="text-center">{{product.0.sale_price}} руб.</td>
+              <td class="text-center">{{product.1}}</td>
+              <td class="text-center">{% widthratio product.0.sale_price 1 product.1 %} руб.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="font-bold text-[#333333]">Итог: {{price}} руб.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+  const detailsForm = document.getElementById('detailsForm');
+  const addressForm = document.getElementById('addressForm');
+  const cardForm = document.getElementById('cardForm');
 
+  const detailsBtn = document.getElementById('detailsBtn');
+  const addressBtn = document.getElementById('addressBtn');
+  const cardBtn = document.getElementById('cardBtn');
+
+  let editingDetails = false;
+  let editingAddress = false;
+  let editingCard = false;
+
+  const editUserDetails = () => {
+    if (!editingDetails) {
+      detailsBtn.innerText = "Отмена";
+      addressBtn.innerText = "Изменить адрес";
+      cardBtn.innerText = "Изменить банковскую карту";
+      editingDetails = true;
+      editingAddress = false;
+      editingCard = false;
+
+      detailsForm.style.display = 'flex';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'none';
+    } else {
+      detailsBtn.innerText = "Изменить личные данные";
+      editingDetails = false;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'none';
+    }
+  }
+
+  const editAddress = () => {
+    if (!editingAddress) {
+      detailsBtn.innerText = "Изменить личные данные";
+      addressBtn.innerText = "Отмена";
+      cardBtn.innerText = "Изменить банковскую карту";
+      editingDetails = false;
+      editingAddress = true;
+      editingCard = false;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'flex';
+      cardForm.style.display = 'none';
+    } else {
+      addressBtn.innerText = "Изменить адрес";
+      editingAddress = false;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'none';
+    }
+  }
+
+  const editCard = () => {
+    if (!editingCard) {
+      detailsBtn.innerText = "Изменить личные данные";
+      addressBtn.innerText = "Изменить адрес";
+      cardBtn.innerText = "Отмена";
+      editingDetails = false;
+      editingAddress = false;
+      editingCard = true;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'flex';
+    } else {
+      cardBtn.innerText = "Изменить банковскую карту";
+      editingCard = false;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'none';
+    }
+  }
+</script>
 {% endblock content %}

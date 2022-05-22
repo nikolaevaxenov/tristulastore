@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import User_Details, User_Address, User_Card
 
-# Register your models here.
+
+admin.site.register(User_Details)
+admin.site.register(User_Address)
+admin.site.register(User_Card)
