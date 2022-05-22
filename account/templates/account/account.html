@@ -39,6 +39,7 @@
       <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editUserDetails()"><p class="text-white text-[18px]" id="detailsBtn">Изменить личные данные</p></button><br>
       <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editAddress()"><p class="text-white text-[18px]" id="addressBtn">Изменить адрес</p></button><br>
       <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editCard()"><p class="text-white text-[18px]" id="cardBtn">Изменить банковскую карту</p></button><br>
+      <button class="bg-[#333333] py-2 px-5 mt-2" onclick="editPassword()"><p class="text-white text-[18px]" id="passwordBtn">Изменить пароль</p></button><br>
     </div>
     <div class="flex mt-2" id="detailsForm" style="display: none">
       <form method="POST" action="/account/details/">
@@ -220,6 +221,52 @@
         </div>
       </form>
     </div>
+    <div class="flex mt-2" id="passwordForm" style="display: none">
+      <form method="POST" action="">
+        {% csrf_token %}
+        <div class="flex flex-col items-center">
+            {{ ChangePasswordForm.oldPassword.label_tag }}
+            <div class="mb-5">
+                {{ ChangePasswordForm.oldPassword }}
+            </div>
+            {% if ChangePasswordForm.oldPassword.errors %}
+                <div class="mb-5">
+                    {{ ChangePasswordForm.oldPassword.errors }}
+                </div>
+            {% endif %}
+    
+            {{ ChangePasswordForm.newPassword.label_tag }}
+            <div class="mb-5">
+                {{ ChangePasswordForm.newPassword }}
+            </div>
+            {% if ChangePasswordForm.newPassword.errors %}
+                <div class="mb-5">
+                    {{ ChangePasswordForm.newPassword.errors }}
+                </div>
+            {% endif %}
+    
+            {{ ChangePasswordForm.confPassword.label_tag }}
+            <div class="mb-5">
+                {{ ChangePasswordForm.confPassword }}
+            </div>
+            {% if ChangePasswordForm.confPassword.errors %}
+                <div class="mb-5">
+                    {{ ChangePasswordForm.confPassword.errors }}
+                </div>
+            {% endif %}
+            {% if ChangePasswordForm.non_field_errors %}
+                <div class="mb-5">
+                    {% for error in ChangePasswordForm.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div>
+                <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Сохранить</p></button>
+            </div>
+        </div>
+      </form>
+    </div>
   </div>
   <div>
     <h1 class="font-bold text-[#333333] text-[32px]">История заказов</h1>
@@ -257,27 +304,35 @@
   const detailsForm = document.getElementById('detailsForm');
   const addressForm = document.getElementById('addressForm');
   const cardForm = document.getElementById('cardForm');
+  const passwordForm = document.getElementById('passwordForm');
 
   const detailsBtn = document.getElementById('detailsBtn');
   const addressBtn = document.getElementById('addressBtn');
   const cardBtn = document.getElementById('cardBtn');
+  const passwordBtn = document.getElementById('passwordBtn');
+
+  let state = "{{state}}";
 
   let editingDetails = false;
   let editingAddress = false;
   let editingCard = false;
+  let editingPassword = false;
 
   const editUserDetails = () => {
     if (!editingDetails) {
       detailsBtn.innerText = "Отмена";
       addressBtn.innerText = "Изменить адрес";
       cardBtn.innerText = "Изменить банковскую карту";
+      passwordBtn.innerText = "Изменить пароль";
       editingDetails = true;
       editingAddress = false;
       editingCard = false;
+      editingPassword = false;
 
       detailsForm.style.display = 'flex';
       addressForm.style.display = 'none';
       cardForm.style.display = 'none';
+      passwordForm.style.display = 'none';
     } else {
       detailsBtn.innerText = "Изменить личные данные";
       editingDetails = false;
@@ -285,6 +340,7 @@
       detailsForm.style.display = 'none';
       addressForm.style.display = 'none';
       cardForm.style.display = 'none';
+      passwordForm.style.display = 'none';
     }
   }
 
@@ -293,13 +349,16 @@
       detailsBtn.innerText = "Изменить личные данные";
       addressBtn.innerText = "Отмена";
       cardBtn.innerText = "Изменить банковскую карту";
+      passwordBtn.innerText = "Изменить пароль";
       editingDetails = false;
       editingAddress = true;
       editingCard = false;
+      editingPassword = false;
 
       detailsForm.style.display = 'none';
       addressForm.style.display = 'flex';
       cardForm.style.display = 'none';
+      passwordForm.style.display = 'none';
     } else {
       addressBtn.innerText = "Изменить адрес";
       editingAddress = false;
@@ -307,6 +366,7 @@
       detailsForm.style.display = 'none';
       addressForm.style.display = 'none';
       cardForm.style.display = 'none';
+      passwordForm.style.display = 'none';
     }
   }
 
@@ -315,13 +375,16 @@
       detailsBtn.innerText = "Изменить личные данные";
       addressBtn.innerText = "Изменить адрес";
       cardBtn.innerText = "Отмена";
+      passwordBtn.innerText = "Изменить пароль";
       editingDetails = false;
       editingAddress = false;
       editingCard = true;
+      editingPassword = false;
 
       detailsForm.style.display = 'none';
       addressForm.style.display = 'none';
       cardForm.style.display = 'flex';
+      passwordForm.style.display = 'none';
     } else {
       cardBtn.innerText = "Изменить банковскую карту";
       editingCard = false;
@@ -329,7 +392,49 @@
       detailsForm.style.display = 'none';
       addressForm.style.display = 'none';
       cardForm.style.display = 'none';
+      passwordForm.style.display = 'none';
     }
+  }
+
+  const editPassword = () => {
+    if (!editingPassword) {
+      detailsBtn.innerText = "Изменить личные данные";
+      addressBtn.innerText = "Изменить адрес";
+      cardBtn.innerText = "Изменить банковскую карту";
+      passwordBtn.innerText = "Отмена";
+      editingDetails = false;
+      editingAddress = false;
+      editingCard = false;
+      editingPassword = true;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'none';
+      passwordForm.style.display = 'flex';
+    } else {
+      passwordBtn.innerText = "Изменить пароль";
+      editingPassword = false;
+
+      detailsForm.style.display = 'none';
+      addressForm.style.display = 'none';
+      cardForm.style.display = 'none';
+      passwordForm.style.display = 'none';
+    }
+  }
+
+  switch (state) {
+    case "1":
+      editUserDetails();
+      break;
+    case "2":
+      editAddress();
+      break;
+    case "3":
+      editCard();
+      break;
+    case "4":
+      editCard();
+      break;
   }
 </script>
 {% endblock content %}

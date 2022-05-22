@@ -1,7 +1,7 @@
 from dataclasses import field
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
+from django.core.validators import MinLengthValidator
 from django import forms
 
 
@@ -11,15 +11,26 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 
+class ChangePassword(forms.Form):
+    oldPassword = forms.CharField(
+        label="Текущий пароль", widget=forms.PasswordInput)
+    newPassword = forms.CharField(
+        label="Новый пароль", widget=forms.PasswordInput)
+    confPassword = forms.CharField(
+        label="Подтвердите пароль", widget=forms.PasswordInput)
+
+    def eqPass(self):
+        if self.cleaned_data['newPassword'] != self.cleaned_data['confPassword']:
+            raise forms.ValidationError("Пароли не совпадают")
+
+
 class CreateUpdateUserDetails(forms.Form):
     first_name = forms.CharField(label="Имя", max_length=255)
     last_name = forms.CharField(label="Фамилия", max_length=255)
     middle_name = forms.CharField(
         label="Отчество", max_length=255, required=False)
-    phone_number = forms.IntegerField(label="Номер телефона", validators=[
-        MinValueValidator(70000000000),
-        MaxValueValidator(79999999999)
-    ])
+    phone_number = forms.CharField(
+        label="Номер телефона", max_length=11, validators=[MinLengthValidator(11)])
 
 
 class CreateUpdateUserAddress(forms.Form):
