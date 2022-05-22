@@ -27,7 +27,6 @@ class Product(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=255)
-    comment = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Orders"

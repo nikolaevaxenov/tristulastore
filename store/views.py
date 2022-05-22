@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+
 from store.models import Product, Order, Order_Product
+
+from account.models import User_Details, User_Address, User_Card
+from .forms import CreateUpdateUserDetails
+
 import json
 
 
@@ -36,9 +41,35 @@ def index(request):
 
 
 @login_required(login_url='/login/')
-def cart(request):
-    if request.method == "POST":
-        if request.POST.get('createOrder'):
+def cartDetails(request):
+    if request.method == 'POST':
+        form = CreateUpdateUserDetails(request.POST)
+        print(form)
+
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            middle_name = form.cleaned_data['middle_name']
+            phone_number = form.cleaned_data['phone_number']
+
+            city = form.cleaned_data['city']
+            street = form.cleaned_data['street']
+            house = form.cleaned_data['house']
+            housing = form.cleaned_data['housing']
+            apartment = form.cleaned_data['apartment']
+            intercom_code = form.cleaned_data['intercom_code']
+
+            card_number = form.cleaned_data['card_number']
+            expiry_date = form.cleaned_data['expiry_date']
+            cvc_code = form.cleaned_data['cvc_code']
+
+            obj, created = User_Details.objects.update_or_create(
+                user_id=request.session['user_id'], defaults={'first_name': first_name, 'last_name': last_name, 'middle_name': middle_name, 'phone_number': phone_number})
+            obj, created = User_Address.objects.update_or_create(
+                user_id=request.session['user_id'], defaults={'city': city, 'street': street, 'house': house, 'housing': housing, 'apartment': apartment, 'intercom_code': intercom_code})
+            obj, created = User_Card.objects.update_or_create(
+                user_id=request.session['user_id'], defaults={'card_number': card_number, 'expiry_date': expiry_date, 'cvc_code': cvc_code})
+
             cart = Order.objects.get(id=request.session['cart_id'])
             cart.status = "progress"
             cart.save()
@@ -49,7 +80,36 @@ def cart(request):
             getCartProductsQuantity(request)
 
             return render(request, 'store/cart.html', {'success': True})
+        else:
+            try:
+                userDetails = User_Details.objects.get(
+                    user_id=request.session['user_id'])
+            except User_Details.DoesNotExist:
+                userDetails = None
 
+            try:
+                userAddress = User_Address.objects.get(
+                    user_id=request.session['user_id'])
+            except User_Address.DoesNotExist:
+                userAddress = None
+
+            try:
+                userCard = User_Card.objects.get(
+                    user_id=request.session['user_id'])
+            except User_Card.DoesNotExist:
+                userCard = None
+
+            order_products = Order_Product.objects.filter(
+                order_id=request.session['cart_id']).all()
+            products = [[Product.objects.get(id=product.product_id), Product.objects.get(id=product.product_id).photo.name[13:], product.quantity, product.id]
+                        for product in order_products]
+
+            return render(request, 'store/cart.html', {'products': products, 'userDetails': userDetails, 'userAddress': userAddress, 'userCard': userCard, 'form': form})
+
+
+@login_required(login_url='/login/')
+def cart(request):
+    if request.method == "POST":
         body = json.loads(request.body)
         if body['action'] != "update":
             product = Order_Product.objects.get(id=body['id'])
@@ -65,12 +125,40 @@ def cart(request):
         return JsonResponse({'action': body['action'], 'totalPrice': getCartProductsTotalPrice(request)})
 
     else:
+        initial_values = {}
+
+        try:
+            userDetails = User_Details.objects.get(
+                user_id=request.session['user_id'])
+            initial_values = initial_values | {'first_name': userDetails.first_name, 'last_name': userDetails.last_name,
+                                               'middle_name': userDetails.middle_name, 'phone_number': int(userDetails.phone_number)}
+        except User_Details.DoesNotExist:
+            userDetails = None
+
+        try:
+            userAddress = User_Address.objects.get(
+                user_id=request.session['user_id'])
+            initial_values = initial_values | {'city': userAddress.city, 'street': userAddress.street, 'house': userAddress.house,
+                                               'housing': userAddress.housing, 'apartment': userAddress.apartment, 'intercom_code': userAddress.intercom_code}
+        except User_Address.DoesNotExist:
+            userAddress = None
+
+        try:
+            userCard = User_Card.objects.get(
+                user_id=request.session['user_id'])
+            initial_values = initial_values | {
+                'card_number': int(userCard.card_number)}
+        except User_Card.DoesNotExist:
+            userCard = None
+
+        userDetailsForm = CreateUpdateUserDetails(initial=initial_values)
+
         order_products = Order_Product.objects.filter(
             order_id=request.session['cart_id']).all()
         products = [[Product.objects.get(id=product.product_id), Product.objects.get(id=product.product_id).photo.name[13:], product.quantity, product.id]
                     for product in order_products]
 
-        return render(request, 'store/cart.html', {'products': products})
+        return render(request, 'store/cart.html', {'products': products, 'userDetails': userDetails, 'userAddress': userAddress, 'userCard': userCard, 'form': userDetailsForm})
 
 
 def catalog(request, product_type="empty", id=-1):
