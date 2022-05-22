@@ -42,7 +42,7 @@ def loginPage(request):
             if not cart:
                 cart = Order(status="cart", user_id=userDB)
                 cart.save()
-            request.session['cart'] = cart
+            request.session['cart_id'] = cart.id
 
             getCartProductsQuantity(request)
             return redirect('index')

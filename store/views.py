@@ -8,7 +8,7 @@ import json
 def getCartProductsQuantity(request):
     if request.session['logged_in']:
         order_products = Order_Product.objects.filter(
-            order_id=request.session['cart'].id).all()
+            order_id=request.session['cart_id']).all()
         sum = 0
         for order_product in order_products:
             sum = sum + order_product.quantity
@@ -18,7 +18,7 @@ def getCartProductsQuantity(request):
 def getCartProductsTotalPrice(request):
     if request.session['logged_in']:
         order_products = Order_Product.objects.filter(
-            order_id=request.session['cart'].id).all()
+            order_id=request.session['cart_id']).all()
         sum = 0
         for order_product in order_products:
             sum = sum + \
@@ -39,12 +39,13 @@ def index(request):
 def cart(request):
     if request.method == "POST":
         if request.POST.get('createOrder'):
-            request.session['cart'].status = "progress"
-            request.session['cart'].save()
+            cart = Order.objects.get(id=request.session['cart_id'])
+            cart.status = "progress"
+            cart.save()
 
             cart = Order(status="cart", user_id=request.session['user_id'])
             cart.save()
-            request.session['cart'] = cart
+            request.session['cart_id'] = cart.id
             getCartProductsQuantity(request)
 
             return render(request, 'store/cart.html', {'success': True})
@@ -65,7 +66,7 @@ def cart(request):
 
     else:
         order_products = Order_Product.objects.filter(
-            order_id=request.session['cart'].id).all()
+            order_id=request.session['cart_id']).all()
         products = [[Product.objects.get(id=product.product_id), Product.objects.get(id=product.product_id).photo.name[13:], product.quantity, product.id]
                     for product in order_products]
 
@@ -76,10 +77,10 @@ def catalog(request, product_type="empty", id=-1):
     if request.method == 'POST':
         product_id = request.POST.get('addToCartBtn')
         order_product = Order_Product.objects.filter(
-            order_id=request.session['cart'].id, product_id=product_id).first()
+            order_id=request.session['cart_id'], product_id=product_id).first()
         if not order_product:
             order_product = Order_Product(
-                quantity=0, order_id=request.session['cart'].id, product_id=product_id)
+                quantity=0, order_id=request.session['cart_id'], product_id=product_id)
             order_product.save()
         order_product.quantity = order_product.quantity + 1
         order_product.save()
