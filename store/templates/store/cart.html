@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+{% block files %}
+{%endblock files %}
+{% block title %}Три стула. Корзина{%endblock title %}
+
+{% block content %}
+{% if success %}
+<h1 class="font-bold text-[#333333] text-[32px] text-center">Заказ успешно оформлен!</h1>
+{% else %}
+{% if products %}
+<div style="margin-left: 10rem; margin-right: 10rem;">
+  <table>
+    <thead>
+      <tr>
+        <th class="text-[#999999]">Изображение</th>
+        <th class="text-[#999999]">Наименование</th>
+        <th class="text-[#999999]">Количество</th>
+        <th class="text-[#999999]">Сумма</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr style="border-bottom: 2px solid black" class="tRow">
+            <td style="width:30%"><img class="mx-auto" src="{% static product.1 %}" alt="Product" width="50%"></td>
+            <td class="font-bold text-[#333333] text-center">{{product.0.name}}</td>
+            <td class="font-bold text-[#333333] text-center">
+              <div>{{product.0.sale_price}} руб.</div>
+              <div class="mt-2">
+                <button class="plusBtn bg-[#333333] py-2 px-5"><p class="text-white text-[18px]">+</p></button>
+                <input type="number" name="{{product.3}}" class="quantity" value="{{product.2}}" style="width: 5em">
+                <button class="minusBtn bg-[#333333] py-2 px-5"><p class="text-white text-[18px]">-</p></button>
+                <button class="delBtn bg-[#333333] py-2 px-5"><p class="text-white text-[18px]">Удалить</p></button>
+              </div>
+            </td>
+            <td class="font-bold text-[#333333] text-center"><span class="localPrice" data-price="{{product.0.sale_price}}">{% widthratio product.0.sale_price 1 product.2 %}</span> руб.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  <h1 class="font-bold text-[#333333] text-[32px] mt-2">Итог: <span id="total"></span></h1>
+  <div class="flex justify-center">
+    <form method="POST" action="">
+      {% csrf_token %}
+      <button class="bg-[#333333] py-2 px-5" name="createOrder" value="true" type="submit"><p class="text-white text-[32px]">Заказать</p></button>
+    </form>
+  </div>
+</div>
+{% else %}
+<h1 class="font-bold text-[#333333] text-[32px] text-center">Корзина пуста!</h1>
+{% endif %}
+{% endif %}
+<script>
+  const plusBtn = document.getElementsByClassName("plusBtn");
+  const inputEl = document.getElementsByClassName("quantity");
+  const minusBtn = document.getElementsByClassName("minusBtn");
+
+  const tRow = document.getElementsByClassName("tRow");
+  const delBtn = document.getElementsByClassName("delBtn");
+
+  const total = document.getElementById("total");
+  const localPrice = document.getElementsByClassName("localPrice");
+
+  const plusAction = (inp, price) => {
+    fetch('/cart/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({'action': "plus", "id": inp.name})
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      inp.value++;
+      total.innerText = data.totalPrice;
+      price.innerText = inp.value * price.dataset.price;
+    });
+  }
+
+  const minusAction = (inp, price) => {
+    if (inp.value > 1) {
+      fetch('/cart/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json; charset=UTF-8',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({'action': "minus", "id": inp.name})
+      }).then((res) => {
+        return res.json();
+      }).then((data) => {
+        inp.value--;
+        total.innerText = data.totalPrice;
+        price.innerText = inp.value * price.dataset.price;
+      });
+    }
+  }
+
+  const delAction = (inp, row) => {
+    fetch('/cart/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({'action': "delete", "id": inp.name})
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      row.remove();
+      total.innerText = data.totalPrice;
+    });
+  }
+
+  const updateTotalAction = () => {
+    fetch('/cart/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({'action': "update"})
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      total.innerText = data.totalPrice;
+    });
+  }
+
+  window.onload = updateTotalAction;
+
+  Array.from(plusBtn).forEach((btn, i) => {
+    btn.onclick = (event) => plusAction(inputEl[i], localPrice[i]);
+  });
+
+  Array.from(minusBtn).forEach((btn, i) => {
+    btn.onclick = (event) => minusAction(inputEl[i], localPrice[i]);
+  });
+
+  Array.from(delBtn).forEach((btn, i) => {
+    btn.onclick = (event) => delAction(inputEl[i], tRow[i]);
+  });
+</script>
+{% endblock content %}

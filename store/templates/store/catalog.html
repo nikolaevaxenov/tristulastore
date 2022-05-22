@@ -30,7 +30,15 @@
     <p class="inline text-[#333333] text-[24px]">{{main_product.4}} руб.</p>
     <p class="inline line-through text-[#999999]">{{main_product.3}} руб.</p>
     <p class="text-[#999999]">{{main_product.2}}</p>
-    <button class="bg-[#333333] py-2 px-5 mt-2" type="submit"><p class="text-white text-[18px]">Купить</p></button>
+    {% if request.session.logged_in == True %}
+    <form method="POST" action="">
+      {% csrf_token %}
+      <button class="bg-[#333333] py-2 px-5 mt-2" name="addToCartBtn" value="{{main_product.0}}" type="submit"><p class="text-white text-[18px]">Купить</p></button>
+    </form>
+
+    {% else %}
+    <a href="/login"><button class="bg-[#999999] py-2 px-5 mt-2" type="button"><p class="text-white text-[18px]">Войти</p></button></a>
+    {% endif %}
   </div>
   <div></div>
   {% if main_product.6 == "Стул" %}
