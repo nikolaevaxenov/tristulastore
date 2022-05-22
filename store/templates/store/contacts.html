@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+{% block files %}
+{%endblock files %}
+{% block title %}Три стула. Контакты{%endblock title %}
+
+{% block content %}
+<div class="grid grid-cols-2 auto-rows-auto">
+  <div class="place-self-center">
+    <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A52bfcfb47544d46ae3fd31fd007dbb7880d41133fffefa56b4e1382b97484bfc&amp;width=510&amp;height=436&amp;lang=ru_RU&amp;scroll=true"></script>
+  </div>
+  <div>
+    <p class="text-[#999999] inline">Метро <p class="inline font-bold text-[#333333]">Красные Ворота</p></p>
+    <p class="text-[#999999] inline">Улица <p class="inline font-bold text-[#333333]">Садовая-Спасская</p></p>
+    <p class="text-[#999999] inline">Дом <p class="inline font-bold text-[#333333]">3</p><p class="text-[#999999] inline"> корпус </p><p class="inline font-bold text-[#333333]">2</p></p>
+    <p class="text-[#999999] inline">Телефон<p class="inline font-bold text-[#333333]">8(902)505-98-90</p></p>
+    <p class="text-[#999999] inline">Электронная почта <p class="inline font-bold text-[#333333]">store@tristula.ga</p></p>
+  </div>
+</div>
+{% endblock content %}

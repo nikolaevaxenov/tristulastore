@@ -193,3 +193,7 @@ def catalog(request, product_type="empty", id=-1):
     main_product = products.filter(id=id)[0]
 
     return render(request, 'store/catalog.html', {'id': id, 'main_product': main_product, 'products': products, 'product_type': product_type})
+
+
+def contacts(request):
+    return render(request, 'store/contacts.html')
