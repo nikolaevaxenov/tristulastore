@@ -39,7 +39,7 @@ class Order_Product(models.Model):
     quantity = models.SmallIntegerField()
 
     class Meta:
-        verbose_name_plural = "Orders"
+        verbose_name_plural = "Order Products"
 
 
 class Feedback(models.Model):
