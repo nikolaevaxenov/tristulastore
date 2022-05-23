@@ -273,9 +273,10 @@ def accountPage(request):
     else:
         changePasswordForm = ChangePassword()
 
+    user_id = request.session.get('user_id')
     try:
         userDetails = User_Details.objects.get(
-            user_id=request.session['user_id'])
+            user_id=user_id)
         userDetailsForm = CreateUpdateUserDetails(
             initial={'first_name': userDetails.first_name, 'last_name': userDetails.last_name, 'middle_name': userDetails.middle_name, 'phone_number': int(userDetails.phone_number)})
     except User_Details.DoesNotExist:
@@ -284,7 +285,7 @@ def accountPage(request):
 
     try:
         userAddress = User_Address.objects.get(
-            user_id=request.session['user_id'])
+            user_id=user_id)
         userAddressForm = CreateUpdateUserAddress(
             initial={'city': userAddress.city, 'street': userAddress.street, 'house': userAddress.house, 'housing': userAddress.housing, 'apartment': userAddress.apartment, 'intercom_code': userAddress.intercom_code})
     except User_Address.DoesNotExist:
@@ -292,7 +293,7 @@ def accountPage(request):
         userAddressForm = CreateUpdateUserAddress()
 
     try:
-        userCard = User_Card.objects.get(user_id=request.session['user_id'])
+        userCard = User_Card.objects.get(user_id=user_id)
         userCardForm = CreateUpdateUserCard(initial={
             'card_number': int(userCard.card_number)})
     except User_Card.DoesNotExist:
@@ -301,7 +302,7 @@ def accountPage(request):
 
     try:
         orders = Order.objects.filter(
-            user_id=request.session["user_id"], status="progress").all()
+            user_id=user_id, status="progress").all()
         order_products = [Order_Product.objects.filter(
             order_id=order.id).all() for order in orders]
         products = [[[Product.objects.get(id=product.product_id), product.quantity, product.order_id]

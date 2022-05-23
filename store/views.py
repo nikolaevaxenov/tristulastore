@@ -11,7 +11,7 @@ import json
 
 
 def getCartProductsQuantity(request):
-    if request.session['logged_in']:
+    if 'logged_in' in request.session:
         order_products = Order_Product.objects.filter(
             order_id=request.session['cart_id']).all()
         sum = 0
