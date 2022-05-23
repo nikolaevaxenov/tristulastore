@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+{% block files %}
+{%endblock files %}
+{% block title %}Три стула. Обратная связь{%endblock title %}
+
+{% block content %}
+<style>
+    input[type=text], input[type=password], input[type=email] {
+        border: none;
+        border-bottom: 2px solid black;
+        text-align: center;
+    }
+
+    textarea {
+        border: 2px solid black;
+    }
+</style>
+<div class="flex flex-col justify-center items-center">
+  {% if success %}
+  <h1 class="font-bold text-[#333333] text-[32px] text-center">Сообщение успешно отправлено!</h1>
+  {% else %}
+  <h1 class="font-bold text-[#333333] text-[32px] text-center">Обратная связь</h1>
+  <form method="POST" action="">
+    {% csrf_token %}
+    <div class="flex flex-col items-center">
+        {{ feedbackForm.subject.label_tag }}
+        <div class="mb-5">
+            {{ feedbackForm.subject }}
+        </div>
+        {% if feedbackForm.subject.errors %}
+            <div class="mb-5">
+                {{ feedbackForm.subject.errors }}
+            </div>
+        {% endif %}
+
+        {{ feedbackForm.description.label_tag }}
+        <div class="mb-5">
+            {{ feedbackForm.description }}
+        </div>
+        {% if feedbackForm.description.errors %}
+            <div class="mb-5">
+                {{ feedbackForm.description.errors }}
+            </div>
+        {% endif %}
+
+        {% if feedbackForm.non_field_errors %}
+            <div class="mb-5">
+                {% for error in feedbackForm.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div>
+            <button class="bg-[#333333] py-2 px-5" type="submit"><p class="text-white text-[18px]">Отправить</p></button>
+        </div>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock content %}

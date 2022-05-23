@@ -2,6 +2,7 @@ from itertools import product
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 import string
 import random
 
@@ -39,3 +40,20 @@ class Order_Product(models.Model):
 
     class Meta:
         verbose_name_plural = "Orders"
+
+
+class Feedback(models.Model):
+    subject = models.CharField(max_length=255)
+    description = models.TextField()
+    checked = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "Feedbacks"
+
+
+class Event(models.Model):
+    event = models.CharField(max_length=255)
+    date = models.DateField(default=date.today)
+
+    class Meta:
+        verbose_name_plural = "Events"

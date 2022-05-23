@@ -24,3 +24,9 @@ class CreateUpdateUserDetails(forms.Form):
         label="Срок действия", max_length=5, validators=[MinLengthValidator(5)])
     cvc_code = forms.CharField(
         label="CVC/CVV код", max_length=3, validators=[MinLengthValidator(3)])
+
+
+class FeedbackForm(forms.Form):
+    subject = forms.CharField(label="Тема обращения", max_length=255)
+    description = forms.CharField(
+        label="Описание обращения", widget=forms.Textarea)

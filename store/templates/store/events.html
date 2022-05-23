@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block icon %}
+<link rel="icon" href="{% static 'store/threechairs.svg' %}">
+{% endblock icon %}
+{% block files %}
+{%endblock files %}
+{% block title %}Три стула. События{%endblock title %}
+
+{% block content %}
+<div class="flex flex-col justify-center items-center">
+  <h1 class="font-bold text-[#333333] text-[32px] text-center">События</h1>
+
+  <div class="mt-2">
+    <table style="border-collapse: separate; border-spacing: 0.5rem">
+      {% for event in events %}
+      <tr>
+        <td><p class="font-bold text-[#333333] inline">{{event.event}}</p></td>
+        <td><p class="font-bold text-[#999999] inline">{{event.date}}</p></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock content %}

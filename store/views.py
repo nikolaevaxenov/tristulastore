@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from store.models import Product, Order, Order_Product
-
 from account.models import User_Details, User_Address, User_Card
-from .forms import CreateUpdateUserDetails
+
+from .models import Product, Order, Order_Product, Feedback, Event
+from .forms import CreateUpdateUserDetails, FeedbackForm
 
 import json
 
@@ -197,3 +197,25 @@ def catalog(request, product_type="empty", id=-1):
 
 def contacts(request):
     return render(request, 'store/contacts.html')
+
+
+def feedback(request):
+    if request.method == 'POST':
+        feedbackForm = FeedbackForm(request.POST)
+        if feedbackForm.is_valid():
+            subject = feedbackForm.cleaned_data['subject']
+            description = feedbackForm.cleaned_data['description']
+
+            feedback = Feedback(subject=subject, description=description)
+            feedback.save()
+
+            return render(request, 'store/feedback.html', {'feedbackForm': feedbackForm, 'success': True})
+    else:
+        feedbackForm = FeedbackForm()
+
+    return render(request, 'store/feedback.html', {'feedbackForm': feedbackForm})
+
+
+def events(request):
+    events = Event.objects.all()
+    return render(request, 'store/events.html', {'events': events})
