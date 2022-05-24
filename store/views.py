@@ -19,6 +19,8 @@ def getCartProductsQuantity(request):
             sum = sum + order_product.quantity
         request.session['cart_quantity'] = sum
 
+        return sum
+
 
 def getCartProductsTotalPrice(request):
     if request.session['logged_in']:
@@ -34,8 +36,13 @@ def getCartProductsTotalPrice(request):
 
 
 def index(request):
-    products = [[i[0], i[1], i[2], i[3][13:]] for i in Product.objects.exclude(sale_price=None).values_list(
-        'name', 'description', 'sale_price', 'photo')[:5]]
+    types = {"Стул": "chair",
+             "Шкаф": "closet",
+             "Стол": "table",
+             "Тумба": "pedestal"}
+
+    products = [[i[0], i[1], i[2], i[3][13:], types[i[4]], i[5]] for i in Product.objects.exclude(
+        sale_price=None).values_list('name', 'description', 'sale_price', 'photo', 'product_type', 'id')[:5]]
 
     return render(request, 'store/index.html', {'products': products})
 
@@ -122,7 +129,7 @@ def cart(request):
         elif body['action'] == "delete":
             product.delete()
 
-        return JsonResponse({'action': body['action'], 'totalPrice': getCartProductsTotalPrice(request)})
+        return JsonResponse({'action': body['action'], 'totalPrice': getCartProductsTotalPrice(request), 'totalQuantity': getCartProductsQuantity(request)})
 
     else:
         initial_values = {}

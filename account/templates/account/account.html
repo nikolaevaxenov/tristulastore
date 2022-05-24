@@ -16,7 +16,7 @@
 {% block title %}Три стула. Личный кабинет{%endblock title %}
 
 {% block content %}
-<div class="grid grid-cols-2 mx-2">
+<div class="grid grid-cols-2 mx-20">
   <div>
     <h1 class="font-bold text-[#333333] text-[32px]">Добро пожаловать, {% if userDetails %}{{userDetails.last_name}} {{userDetails.first_name}}{% if userDetails.middle_name %} {{userDetails.middle_name}}{% endif %}{% else %}{{ request.user }}{% endif %}!</h1>
     {% if userDetails %}<p class="font-bold text-[#333333] text-[16px]">Номер телефона: {{userDetails.phone_number}}</p>{% endif %}
@@ -264,19 +264,19 @@
         <table style="border-collapse: separate; border-spacing: 0.5rem">
           <thead>
             <tr>
-              <th>Наименование</th>
-              <th>Цена</th>
-              <th>Количество</th>
-              <th>Сумма</th>
+              <th class="text-[#333333]">Наименование</th>
+              <th class="text-[#333333]">Цена</th>
+              <th class="text-[#333333]">Количество</th>
+              <th class="text-[#333333]">Сумма</th>
             </tr>
           </thead>
           <tbody>
             {% for product in order %}
             <tr>
-              <td class="text-center">{{product.0.name}}</td>
-              <td class="text-center">{{product.0.sale_price}} руб.</td>
-              <td class="text-center">{{product.1}}</td>
-              <td class="text-center">{% widthratio product.0.sale_price 1 product.1 %} руб.</td>
+              <td class="text-center text-[#333333]">{{product.0.name}}</td>
+              <td class="text-center text-[#333333]">{{product.0.sale_price}} руб.</td>
+              <td class="text-center text-[#333333]">{{product.1}}</td>
+              <td class="text-center text-[#333333]">{% widthratio product.0.sale_price 1 product.1 %} руб.</td>
             </tr>
             {% endfor %}
           </tbody>

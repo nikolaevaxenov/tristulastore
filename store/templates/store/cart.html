@@ -182,7 +182,7 @@
                   <div>{{product.0.sale_price}} руб.</div>
                   <div class="mt-2">
                     <button class="plusBtn bg-[#333333] py-2 px-5"><p class="text-white text-[18px]">+</p></button>
-                    <input type="number" name="{{product.3}}" class="quantity" value="{{product.2}}" style="width: 5em">
+                    <input type="number" name="{{product.3}}" class="quantity border-none focus:ring-0" value="{{product.2}}" style="width: 5em" disabled>
                     <button class="minusBtn bg-[#333333] py-2 px-5"><p class="text-white text-[18px]">-</p></button>
                     <button class="delBtn bg-[#333333] py-2 px-5"><p class="text-white text-[18px]">Удалить</p></button>
                   </div>
@@ -216,6 +216,8 @@
 
   const detailsForm = document.getElementById("detailsForm");
 
+  const cartQuantity = document.getElementById("cartQuantity");
+
   const plusAction = (inp, price) => {
     fetch('/cart/', {
       method: 'POST',
@@ -231,6 +233,7 @@
       inp.value++;
       total.innerText = data.totalPrice;
       price.innerText = inp.value * price.dataset.price;
+      cartQuantity.innerText = data.totalQuantity;
     });
   }
 
@@ -250,6 +253,7 @@
         inp.value--;
         total.innerText = data.totalPrice;
         price.innerText = inp.value * price.dataset.price;
+        cartQuantity.innerText = data.totalQuantity;
       });
     }
   }
@@ -268,6 +272,11 @@
     }).then((data) => {
       row.remove();
       total.innerText = data.totalPrice;
+      if (data.totalQuantity == 0) {
+        document.location.reload();
+      } else {
+        cartQuantity.innerText = data.totalQuantity;
+      }
     });
   }
 
@@ -284,6 +293,7 @@
       return res.json();
     }).then((data) => {
       total.innerText = data.totalPrice;
+      cartQuantity.innerText = data.totalQuantity;
     });
   }
 

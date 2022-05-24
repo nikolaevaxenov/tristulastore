@@ -34,10 +34,10 @@
             {% csrf_token %}
             <div class="flex flex-col items-center">
                 <div class="mb-5">
-                    <input type="text" name="username" id="username" placeholder="Логин">
+                    <input class="border-none focus:ring-0" type="text" name="username" id="username" placeholder="Логин">
                 </div>
                 <div class="mb-5">
-                    <input type="password" name="password" id="password" placeholder="Пароль">
+                    <input class="border-none focus:ring-0" type="password" name="password" id="password" placeholder="Пароль">
                 </div>
                 {% for message in messages %}
                     <p class="mb-5">{{ message }}</p>
@@ -49,7 +49,7 @@
         </form>
         
         <div class="flex flex-col items-center">
-            <p class="text-[#999999]">Если у вас нет аккаунта <a class="text-black" href="/registration">Зарегестрируйтесь</a></p>
+            <p class="text-[#999999]">Если у вас нет аккаунта <a class="text-black" href="/registration">Зарегистрируйтесь</a></p>
         </div>
     </div>
 </div>
